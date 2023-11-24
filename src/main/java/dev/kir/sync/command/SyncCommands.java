@@ -3,7 +3,6 @@ package dev.kir.sync.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.kir.sync.Sync;
-import dev.kir.sync.util.reflect.Activator;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
@@ -16,11 +15,11 @@ public class SyncCommands {
     private static final Set<Command> COMMANDS = new HashSet<>();
 
     public static void init() {
-        register(GhostShellsCommand.class);
+        register(new GhostShellsCommand());
     }
 
-    private static <T extends Command> void register(Class<T> type) {
-        COMMANDS.add(Activator.createInstance(type));
+    private static <T extends Command> void register(T type) {
+        COMMANDS.add(type);
     }
 
     private static void init(MinecraftServer server) {

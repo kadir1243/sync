@@ -1,0 +1,20 @@
+package dev.kir.sync.mixin.client;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+import java.util.List;
+import java.util.Map;
+
+@Mixin(ModelPart.class)
+@Environment(EnvType.CLIENT)
+public interface ModelPartAccessor {
+    @Accessor
+    List<ModelPart.Cuboid> getCuboids();
+
+    @Accessor
+    Map<String, ModelPart> getChildren();
+}

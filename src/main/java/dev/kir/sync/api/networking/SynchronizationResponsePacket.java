@@ -14,6 +14,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class SynchronizationResponsePacket implements ClientPlayerPacket {
@@ -33,6 +34,11 @@ public class SynchronizationResponsePacket implements ClientPlayerPacket {
         this.targetPos = targetPos;
         this.targetFacing = targetFacing;
         this.storedState = storedState;
+    }
+
+    @ApiStatus.Internal
+    public SynchronizationResponsePacket() {
+        this(null, null, null, null, null, null, null);
     }
 
     @Override

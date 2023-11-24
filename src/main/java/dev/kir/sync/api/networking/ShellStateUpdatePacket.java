@@ -16,6 +16,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.UUID;
 
@@ -30,6 +31,11 @@ public class ShellStateUpdatePacket implements ClientPlayerPacket {
     public ShellStateUpdatePacket(ShellStateUpdateType type, ShellState shellState) {
         this.type = type;
         this.shellState = shellState;
+    }
+
+    @ApiStatus.Internal
+    public ShellStateUpdatePacket() {
+        this(null, null);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dev.kir.sync.client.model;
 
 import dev.kir.sync.client.render.CustomRenderLayer;
+import dev.kir.sync.mixin.client.AnimalModelAccessor;
 import dev.kir.sync.util.client.render.ModelUtil;
 import dev.kir.sync.util.math.Voxel;
 import net.fabricmc.api.EnvType;
@@ -139,13 +140,13 @@ public class VoxelModel extends Model {
 
     private static Stream<Voxel> extractVoxels(AnimalModel<?> model) {
         return Stream.concat(
-            StreamSupport.stream(model.getHeadParts().spliterator(), false),
-            StreamSupport.stream(model.getBodyParts().spliterator(), false)
+            StreamSupport.stream(((AnimalModelAccessor)model).getHeadParts().spliterator(), false),
+            StreamSupport.stream(((AnimalModelAccessor)model).getBodyParts().spliterator(), false)
         ).flatMap(ModelUtil::asVoxels);
     }
 
     private static Pair<Vec3f, Vec3f> computePivotAndSize(boolean isUpsideDown, List<Voxel> voxels) {
-        if (voxels.size() == 0) {
+        if (voxels.isEmpty()) {
             return new Pair<>(Vec3f.ZERO, Vec3f.ZERO);
         }
 

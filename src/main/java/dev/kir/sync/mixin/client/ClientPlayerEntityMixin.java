@@ -1,4 +1,4 @@
-package dev.kir.sync.mixin;
+package dev.kir.sync.mixin.client;
 
 import com.mojang.authlib.GameProfile;
 import dev.kir.sync.Sync;

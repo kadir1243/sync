@@ -2,11 +2,17 @@ package dev.kir.sync.client.render.entity;
 
 import dev.kir.sync.api.shell.ShellState;
 import dev.kir.sync.client.model.ShellModel;
+import dev.kir.sync.client.texture.GeneratedTextureManager;
+import dev.kir.sync.client.texture.TextureGenerators;
+import dev.kir.sync.compat.iris.IrisRenderLayer;
 import dev.kir.sync.entity.ShellEntity;
+import dev.kir.sync.mixin.client.AnimalModelAccessor;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexConsumers;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -14,6 +20,7 @@ import net.minecraft.client.render.entity.model.AnimalModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 
@@ -64,9 +71,34 @@ public class ShellEntityRenderer extends PlayerEntityRenderer {
         matrices.pop();
     }
 
-    @SuppressWarnings("unused")
+    private static final boolean IRIS = FabricLoader.getInstance().isModLoaded("iris");
     private VertexConsumer getVertexConsumerForPartiallyTexturedEntity(ShellEntity shell, float progress, RenderLayer baseLayer, VertexConsumerProvider vertexConsumers) {
-        return vertexConsumers.getBuffer(baseLayer);
+        VertexConsumer baseConsumer = vertexConsumers.getBuffer(baseLayer);
+
+        if (IRIS) {
+            if (!(progress >= ShellState.PROGRESS_PRINTING && progress < ShellState.PROGRESS_DONE)) {
+                return baseConsumer;
+            }
+
+            Identifier[] textures = GeneratedTextureManager.getTextures(TextureGenerators.PlayerEntityPartiallyTexturedTextureGenerator);
+            if (textures.length == 0) {
+                return baseConsumer;
+            }
+
+            float printingProgress = (progress - ShellState.PROGRESS_PRINTING) / (ShellState.PROGRESS_PAINTING);
+            RenderLayer printingMaskLayer = IrisRenderLayer.getPrintingMask(textures[(int)(textures.length * printingProgress)]);
+
+            // TODO
+            // Fix dev.kir.sync.compat.iris.IrisRenderLayer::getPrintingMask,
+            // and then fix combining baseConsumer with printingMaskVertexConsumer
+            VertexConsumer printingMaskVertexConsumer = vertexConsumers.getBuffer(printingMaskLayer);
+            if (printingMaskVertexConsumer == baseConsumer) {
+                return vertexConsumers.getBuffer(baseLayer);
+            }
+            return VertexConsumers.union(printingMaskVertexConsumer, baseConsumer);
+        }
+
+        return baseConsumer;
     }
 
     @Override
@@ -76,8 +108,8 @@ public class ShellEntityRenderer extends PlayerEntityRenderer {
 
     protected void applyStateToModel(ShellModel<PlayerEntityModel<?>> model, ShellState state) {
         AnimalModel<?> animalModel = model.parentModel;
-        animalModel.getHeadParts().forEach(x -> x.setAngles(0, 0, 0));
-        animalModel.getBodyParts().forEach(x -> x.setAngles(0, 0, 0));
+        ((AnimalModelAccessor)animalModel).getHeadParts().forEach(x -> x.setAngles(0, 0, 0));
+        ((AnimalModelAccessor)animalModel).getBodyParts().forEach(x -> x.setAngles(0, 0, 0));
         animalModel.child = false;
         model.parentModel.setVisible(true);
         model.setBuildProgress(state.getProgress());

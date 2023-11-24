@@ -1,9 +1,11 @@
 package dev.kir.sync.entity;
 
+import dev.kir.sync.mixin.DimensionTypeAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.math.*;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.function.Consumer;
 
@@ -11,7 +13,7 @@ import java.util.function.Consumer;
 public class PersistentCameraEntityGoal {
     public static final double MAX_DISTANCE = 25;
     public static final long PHASE_DELAY = 200;
-    public static final double MAX_Y = DimensionType.OVERWORLD.getHeight() * 1.01;
+    public static final double MAX_Y = DimensionTypeAccessor.getOverworld().getHeight() * 1.01;
     public static final long MIN_PHASE_DURATION = 400;
     public static final long MAX_PHASE_DURATION = 2500;
 

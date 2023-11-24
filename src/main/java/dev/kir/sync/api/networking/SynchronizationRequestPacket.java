@@ -29,6 +29,10 @@ public class SynchronizationRequestPacket implements ServerPlayerPacket {
         this.shellUuid = shellUuid;
     }
 
+    public SynchronizationRequestPacket() {
+        this((UUID) null);
+    }
+
     @Override
     public Identifier getId() {
         return Sync.locate("packet.shell.synchronization.request");

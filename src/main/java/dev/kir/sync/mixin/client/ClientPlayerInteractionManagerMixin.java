@@ -1,4 +1,4 @@
-package dev.kir.sync.mixin;
+package dev.kir.sync.mixin.client;
 
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.Entity;

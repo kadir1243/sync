@@ -1,4 +1,4 @@
-package dev.kir.sync.mixin;
+package dev.kir.sync.mixin.client;
 
 import com.google.common.collect.ImmutableMap;
 import dev.kir.sync.client.render.entity.ShellEntityRenderer;

@@ -1,5 +1,6 @@
 package dev.kir.sync.util.client.render;
 
+import dev.kir.sync.mixin.client.ModelPartAccessor;
 import dev.kir.sync.util.math.Voxel;
 import dev.kir.sync.util.math.VoxelIterator;
 import net.fabricmc.api.EnvType;
@@ -15,7 +16,7 @@ import java.util.stream.StreamSupport;
 @Environment(EnvType.CLIENT)
 public final class ModelUtil {
     public static ModelPart copy(ModelPart original) {
-        ModelPart copy = new ModelPart(original.cuboids, original.children);
+        ModelPart copy = new ModelPart(((ModelPartAccessor) (Object) original).getCuboids(), ((ModelPartAccessor) (Object) original).getChildren());
         copy.copyTransform(original);
         return copy;
     }
@@ -29,8 +30,8 @@ public final class ModelUtil {
         final float pivotY = y + part.pivotY;
         final float pivotZ = z + part.pivotZ;
         return Stream.concat(
-            part.cuboids.stream().flatMap(cuboid -> asVoxels(pivotX, pivotY, pivotZ, cuboid)),
-            part.children.values().stream().flatMap(p -> asVoxels(pivotX, pivotY, pivotZ, p))
+                ((ModelPartAccessor)(Object) part).getCuboids().stream().flatMap(cuboid -> asVoxels(pivotX, pivotY, pivotZ, cuboid)),
+                ((ModelPartAccessor)(Object) part).getChildren().values().stream().flatMap(p -> asVoxels(pivotX, pivotY, pivotZ, p))
         );
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.UUID;
 
@@ -19,6 +20,11 @@ public class PlayerIsAlivePacket implements ClientPlayerPacket {
 
     public PlayerIsAlivePacket(PlayerEntity player) {
         this(player == null ? null : player.getUuid());
+    }
+
+    @ApiStatus.Internal
+    public PlayerIsAlivePacket() {
+        this((UUID) null);
     }
 
     public PlayerIsAlivePacket(UUID playerUuid) {

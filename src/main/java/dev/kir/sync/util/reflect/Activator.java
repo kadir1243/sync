@@ -8,6 +8,10 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * @deprecated No Replacement this directly uses reflection and I will remove it to be way faster
+ */
+@Deprecated(forRemoval = true)
 public final class Activator {
     @SuppressWarnings("unchecked")
     public static <T> Optional<Constructor<T>> getPublicConstructor(Class<T> type) {

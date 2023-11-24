@@ -18,7 +18,6 @@ public final class IrisRenderLayer extends RenderLayer {
         return VOXELS;
     }
 
-    @SuppressWarnings("unused")
     public static RenderLayer getEntityTranslucentPartiallyTextured(Identifier textureId, float cutoutY, boolean affectsOutline) {
         return RenderLayer.getEntityTranslucent(textureId, affectsOutline);
     }

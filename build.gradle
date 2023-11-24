@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "fabric-loom" version "0.11-SNAPSHOT"
+    id "fabric-loom" version "1.4-SNAPSHOT"
     id "org.ajoberstar.grgit" version "4.1.0"
 }
 
@@ -20,15 +20,14 @@ crowdintranslate.crowdinProjectname = "sync-fabric"
 crowdintranslate.minecraftProjectName = "sync"
 crowdintranslate.verbose = true
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-String loaderDependencyVersion = project.loader_version.split(/\+/)[0]
 String minecraftDependencyVersion = project.minecraft_version.split(/[+ -]/)[0]
 
 group = project.maven_group
 version = "${project.mod_version}${getVersionMetadata()}" as Object
-archivesBaseName = "${project.archives_base_name}-mc${minecraftDependencyVersion}"
+
+base {
+    archivesName = project.archives_base_name + "-mc" + minecraftDependencyVersion
+}
 
 loom {
     accessWidenerPath = file("src/main/resources/sync.accesswidener")
@@ -41,7 +40,7 @@ repositories {
     }
     maven {
         name = "Ladysnake Libs"
-        url = "https://ladysnake.jfrog.io/artifactory/mods"
+        url = "https://maven.ladysnake.org/releases"
     }
     maven {
         name = "Cloth Config"
@@ -60,6 +59,10 @@ repositories {
         content {
             includeGroup "maven.modrinth"
         }
+    }
+    maven {
+        name = "willBlRepositoryReleases"
+        url = "https://maven.willbl.dev/releases"
     }
     maven {
         name = "CrowdinTranslate"
@@ -84,6 +87,27 @@ repositories {
             includeGroup "net.adriantodt.fabricmc"
         }
     }
+    maven {
+        name = "Appleskin"
+        url = "https://maven.ryanliptak.com/"
+        content {
+            includeGroup 'squeek.appleskin'
+        }
+    }
+    maven {
+        name = "Jared"
+        url 'https://maven.blamejared.com'
+        content {
+            includeGroup "vazkii.patchouli"
+        }
+    }
+    maven {
+        name = "GeckoLib"
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven"
+        content {
+            includeGroup "software.bernie.geckolib"
+        }
+    }
 }
 
 // To change the versions see the gradle.properties file
@@ -104,14 +128,16 @@ dependencies {
     modImplementation "dev.emi:trinkets:${project.trinkets_version}"
     modImplementation "io.github.ladysnake:requiem-api:${project.requiem_version}"
     modImplementation "com.github.apace100:origins-fabric:${project.origins_version}"
-    modCompileOnly "maven.modrinth:haema:${project.haema_version}"
+    modImplementation "com.github.apace100:apoli:2.3.3"
+    modImplementation "com.github.apace100:calio:${project.calio_version}"
+    modCompileOnly "com.williambl.haema:haema:${project.haema_version}"
+    compileOnly("com.demonwav.mcdev:annotations:1.0")
 }
 
 processResources {
     filesMatching("fabric.mod.json") {
         expand([
             "version": version,
-            "fabric": ">=${loaderDependencyVersion}",
             "minecraft": ">=${minecraftDependencyVersion}",
             "smart_recipes": project.smartrecipes_version,
             "satin_api": project.satin_version,
@@ -128,16 +154,13 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
-    it.options.encoding = "UTF-8"
     it.options.release.set(17)
 }
 
 java {
     withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {

@@ -2,7 +2,7 @@ package dev.kir.sync.util;
 
 import dev.kir.sync.Sync;
 import dev.kir.sync.config.SyncConfig;
-import net.minecraft.block.DispenserBlock;
+import dev.kir.sync.mixin.DispenserBlockAccessor;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
@@ -37,7 +37,7 @@ public final class ItemUtil {
     }
 
     public static boolean isArmor(ItemConvertible item) {
-        return DispenserBlock.BEHAVIORS.get(item.asItem()) == ArmorItem.DISPENSER_BEHAVIOR;
+        return DispenserBlockAccessor.getBehaviors().get(item.asItem()) == ArmorItem.DISPENSER_BEHAVIOR;
     }
 
 

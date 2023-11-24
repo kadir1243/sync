@@ -1,6 +1,5 @@
 package dev.kir.sync.api.networking;
 
-import dev.kir.sync.util.reflect.Activator;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -41,12 +40,20 @@ public interface ServerPlayerPacket extends PlayerPacket {
     void execute(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketSender responseSender);
 
     /**
+     * @deprecated replaced with {@link #register(Supplier)}
+     */
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    static <T extends ServerPlayerPacket> void register(Class<T> type) {
+        register(dev.kir.sync.util.reflect.Activator.createSupplier(type).orElseThrow());
+    }
+
+    /**
      * Registers a server side handler for the specified packet.
-     * @param type Class of the packet.
+     * @param supplier Supplier for the packet.
      * @param <T> The packet.
      */
-    static <T extends ServerPlayerPacket> void register(Class<T> type) {
-        Supplier<T> supplier = Activator.createSupplier(type).orElseThrow();
+    static <T extends ServerPlayerPacket> void register(Supplier<T> supplier) {
         ServerPlayerPacket packet = supplier.get();
         ServerPlayNetworking.registerGlobalReceiver(packet.getId(), (server, player, handler, buffer, responseSender) -> {
             ServerPlayerPacket localPacket = supplier.get();

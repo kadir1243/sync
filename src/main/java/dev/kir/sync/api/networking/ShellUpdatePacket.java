@@ -12,6 +12,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +26,11 @@ public class ShellUpdatePacket implements ClientPlayerPacket {
         this.worldId = worldId;
         this.isArtificial = isArtificial;
         this.states = states == null ? List.of() : states;
+    }
+
+    @ApiStatus.Internal
+    public ShellUpdatePacket() {
+        this(null, false, null);
     }
 
     @Override

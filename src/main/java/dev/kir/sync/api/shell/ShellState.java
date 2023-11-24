@@ -64,7 +64,6 @@ public class ShellState {
 
     private final NbtSerializer<ShellState> serializer;
 
-    // <========================== Java Is Shit ==========================> //
     public UUID getUuid() {
         return this.uuid;
     }
@@ -148,7 +147,6 @@ public class ShellState {
     public void setPos(BlockPos pos) {
         this.pos = pos;
     }
-    // <========================== Java Is Shit ==========================> //
 
     private ShellState() {
         this.serializer = NBT_SERIALIZER_FACTORY.create(this);

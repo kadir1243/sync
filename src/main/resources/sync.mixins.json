@@ -4,20 +4,24 @@
   "package": "dev.kir.sync.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MinecraftServerMixin",
+    "DimensionTypeAccessor",
+    "DispenserBlockAccessor",
     "LivingEntityMixin",
+    "MinecraftServerMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin"
   ],
   "client": [
     "EntityMixin",
-    "LivingEntityRendererAccessor",
-    "ClientPlayerEntityMixin",
-    "ClientPlayerInteractionManagerMixin",
-    "EntityRenderDispatcherMixin",
-    "MinecraftClientMixin",
-    "PlayerEntityModelMixin",
-    "WorldRendererMixin"
+    "client.AnimalModelAccessor",
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayerInteractionManagerMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.LivingEntityRendererAccessor",
+    "client.MinecraftClientMixin",
+    "client.ModelPartAccessor",
+    "client.PlayerEntityModelMixin",
+    "client.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -13,12 +13,18 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.ApiStatus;
 
 public class ShellDestroyedPacket implements ClientPlayerPacket {
     private BlockPos pos;
 
     public ShellDestroyedPacket(BlockPos pos) {
         this.pos = pos == null ? BlockPos.ORIGIN : pos;
+    }
+
+    @ApiStatus.Internal
+    public ShellDestroyedPacket() {
+        this(null);
     }
 
     @Override

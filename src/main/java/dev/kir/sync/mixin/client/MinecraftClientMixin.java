@@ -1,4 +1,4 @@
-package dev.kir.sync.mixin;
+package dev.kir.sync.mixin.client;
 
 import dev.kir.sync.client.gui.controller.DeathScreenController;
 import net.fabricmc.api.EnvType;
